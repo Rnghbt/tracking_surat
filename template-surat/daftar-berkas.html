@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/4b89c812ef.js" crossorigin="anonymous"></script>
+</head>
+<style>
+    :root {
+        --sidebar: 255px;
+    }
+
+    .sidebar {
+        position: absolute;
+        width: var(--sidebar);
+        height: 100vh;
+    }
+
+    .content {
+        margin-left: var(--sidebar);
+    }
+
+    .container {
+        height: calc(100vh - 64px);
+    }
+
+    .card {
+        border: none;
+    }
+</style>
+
+<body class="overflow-hidden">
+    <aside class="sidebar p-3 bg-light">
+        <h1>Tracking.</h1>
+        <div class="form mb-4">
+            <input type="text" class="form-control" placeholder="Search..">
+            <i class="icon-right fa fa-solid fa-magnifying-glass fa-md"></i>
+        </div>
+        <div class="col">
+            <div class="row mb-2">
+                <div class="menu-items px-3 py-2 bg-primary rounded">
+                    <div class="row">
+                        <div class="col-2"><i class="fa fa-solid fa-home fa-md"></i></div>
+                        <div class="col"><span class="ml-3">Home</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="menu-items px-3 py-2 bg-subtle rounded">
+                    <div class="row">
+                        <div class="col-2"><i class="fa fa-solid fa-file fa-md"></i></div>
+                        <div class="col"><span class="ml-3">Berkas</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- content -->
+    <div class="content">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-md">
+                <i class="fa fa-bars fa-lg fa-solid p-3"></i>
+
+                <div class="d-flex">
+                    <div class="text-end">
+                        <span class="fw-bold">Person 1</span>
+                        <p class="mb-0">20:30</p>
+                    </div>
+                    <img src="https://placeholder.com/32x32" class="rounded-pill my-auto ms-3" alt="">
+                </div>
+            </div>
+        </nav>
+        <div class="container px-3 py-4 overflow-y-scroll">
+
+            <!-- daftar berkas -->
+            <div class="my-3">
+                <h1>Daftar Berkas</h1>
+                <div class="d-flex">
+                    <div class="flex-fill px-2">
+                        <div class="form mb-4">
+                            <input type="text" class="form-control" placeholder="Search..">
+                            <i class="icon-right fa fa-solid fa-magnifying-glass fa-md"></i>
+                        </div>
+                    </div>
+                    <div class="">
+                        <button class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#TambahModal">Tambah</button>
+                    </div>
+                    <div class=" px-2">
+                        <button class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#AmbilModal">Ambil</button>
+                    </div>
+                </div>
+
+
+                <hr>
+                <div class="table-responsive">
+                    <table class="table align-middle table-borderless">
+                        <thead class="table-light">
+                            <tr>
+                                <th>No.</th>
+                                <th>Pengirim</th>
+                                <th>Perihal</th>
+                                <th>Status</th>
+                                <th>Histori</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>SMK Negri 1 Bali</td>
+                                <td>Kunjungan</td>
+                                <td>Open</td>
+                                <td>
+                                    <button class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#historyModal">
+                                        <i class="fa fa-solid fa-clock fa-md mr-2"></i>
+                                        3
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary">
+                                        Detail <i class=" fa fa-solid fa-circle-info fa-md"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- end daftar berkas -->
+
+            <!-- Modal -->
+            <!-- Modal -->
+            <div class="modal modal-lg fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="historyModalLabel">Histori</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="events">
+                                <li>
+                                    <time datetime="10:03">10:03</time>
+                                    <span><strong>Bat &amp; Ball</strong> On time</span>
+                                </li>
+
+                                <li>
+                                    <time datetime="10:03">10:03</time>
+                                    <span><strong>Bat &amp; Ball</strong> On time</span>
+                                </li>
+
+                                <li>
+                                    <time datetime="10:03">10:03</time>
+                                    <span><strong>Bat &amp; Ball</strong> On time and other text that may span over 2
+                                        lines</span>
+                                </li>
+
+                                <li>
+                                    <time datetime="10:03">10:03</time>
+                                    <span><strong>Bat &amp; Ball</strong> On time</span>
+                                </li>
+
+                                <li>
+                                    <time datetime="10:03">10:03</time>
+                                    <span><strong>Bat &amp; Ball</strong> On time</span>
+                                </li>
+
+                                <li>
+                                    <time datetime="10:03">10:03</time>
+                                    <span><strong>Bat &amp; Ball</strong> On time</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="AmbilModal" tabindex="-1" aria-labelledby="AmbilModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="AmbilModalLabel">Ambil Berkas</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal modal-lg fade" id="TambahModal" tabindex="-1" aria-labelledby="TambahModalLabel"
+                aria-hidden="true">
+                <form action="" method="post">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="TambahModalLabel">Tambah Berkas</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Detail berkas -->
+                                <div class="mb-4">
+                                    <div class="mb-2">
+                                        <label for="">Nama Dokumen</label>
+                                        <div class="form">
+                                            <input type="text" class="form-control">
+                                            <!-- <i class="icon-right fa fa-solid fa-magnifying-glass fa-md"></i> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label for="">Agenda Dokumen</label>
+                                        <div class="form">
+                                            <input type="text" class="form-control">
+                                            <!-- <i class="icon-right fa fa-solid fa-magnifying-glass fa-md"></i> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label for="">Perihal Dokumen</label>
+                                        <div class="form">
+                                            <input type="text" class="form-control">
+                                            <!-- <i class="icon-right fa fa-solid fa-magnifying-glass fa-md"></i> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label for="">Nama Pengirim</label>
+                                        <div class="form">
+                                            <input type="text" class="form-control">
+                                            <!-- <i class="icon-right fa fa-solid fa-magnifying-glass fa-md"></i> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label for="">Uraian Dokumen</label>
+                                        <div class="form">
+                                            <input type="text" class="form-control">
+                                            <!-- <i class="icon-right fa fa-solid fa-magnifying-glass fa-md"></i> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label for="">Tanggal Diterima</label>
+                                        <div class="form">
+                                            <input type="date" class="form-control">
+                                            <!-- <i class="icon-right fa fa-solid fa-calendar fa-md"></i> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label for="">Tanggal Dokumen</label>
+                                        <div class="form">
+                                            <input type="date" class="form-control">
+                                            <!-- <i class="icon-right fa fa-solid fa-calendar fa-md"></i> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label for="">Tanggal Agenda</label>
+                                        <div class="form">
+                                            <input type="date" class="form-control">
+                                            <!-- <i class="icon-right fa fa-solid fa-calendar fa-md"></i> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label for="">Attachment Document</label>
+                                        <div class="form">
+                                            <input type="file" class="form-control">
+                                            <!-- <i class="icon-right fa fa-solid fa-download fa-md"></i> -->
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- end Detail berkas -->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <input type="submit" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
