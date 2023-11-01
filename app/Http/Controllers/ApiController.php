@@ -12,11 +12,12 @@ class ApiController extends Controller
 
     public function getDataBerkas($id_pegawai)
     {
+        $api_endpoint = env('API_ENDPOINT');
         if (!session()->has('berkas')) {
             $response = Http::withHeaders([
                 'id_pegawai' => $id_pegawai,
                 'Content-Type' => 'multipart/form-data'
-            ])->get('http://103.100.27.59/~lacaksurat/list_surat.php');
+            ])->get($api_endpoint . 'list_surat.php');
 
             $files = $response->json()['data'];;
 
@@ -89,10 +90,11 @@ class ApiController extends Controller
 
     public function getListDisposisi($id_pegawai)
     {
+        $api_endpoint = env('API_ENDPOINT');
         if (!session()->has('disposisi')) {
             $listDisposisi = Http::withHeaders([
                 'id_pegawai' => $id_pegawai
-            ])->get('http://103.100.27.59/~lacaksurat/list_pegawai_disposisi.php');
+            ])->get($api_endpoint . 'list_pegawai_disposisi.php');
 
             $ds = $listDisposisi->json()['data'];
 
@@ -188,6 +190,38 @@ class ApiController extends Controller
         return view('dashboard', compact('files', 'history', 'disposisi', 'tags', 'cards'));
     }
 
+    public function search(Request $request)
+    {
+        $id_pegawai = 1;
+
+        $files = $this->getDataBerkas($id_pegawai);
+
+        $files = collect($files);
+
+        // Pencarian
+        if ($request->has('keyword')) {
+            $keyword = $request->input('keyword');
+            $files = $files->filter(function ($file) use ($keyword) {
+                return stripos($file['nama_dokumen'], $keyword) !== false ||
+                    stripos($file['ringkasan_dokumen'], $keyword) !== false ||
+                    stripos($file['tiket_id'], $keyword) !== false ||
+                    stripos($file['nama_pengirim'], $keyword) !== false;
+            });
+        }
+
+        // Pencarian
+        if ($request->has('status')) {
+            $status = $request->input('status');
+            if ($status == 1 || $status == 0) {
+                $files = $files->filter(function ($file) use ($status) {
+                    return stripos($file['status'], $status) !== false;
+                });
+            }
+        }
+
+        return json_encode($files);
+    }
+
 
 
     public function detail(string $id): View
@@ -207,7 +241,10 @@ class ApiController extends Controller
         $file_name = null;
 
         if (isset($file)) {
-            $lampiran_path = json_decode($file['lampiran'], true)['path'];
+
+            if (isset(json_decode($file['lampiran'], true)['path'])) {
+                $lampiran_path = json_decode($file['lampiran'], true)['path'];
+            }
             $file_name = basename($lampiran_path);
         } else {
             $file = "Error file not found";
@@ -225,6 +262,8 @@ class ApiController extends Controller
 
     public function upload(Request $request)
     {
+        $api_endpoint = env('API_ENDPOINT');
+
         $id_pegawai = 1;
 
         $tags = $request->input('p_tag');
@@ -254,7 +293,7 @@ class ApiController extends Controller
             'p_lampiran',
             file_get_contents($d['attachmentDocument']),
             $d['namaDokumen'] . ".pdf",
-        )->post('http://103.100.27.59/~lacaksurat/register_surat.php', [
+        )->post($api_endpoint . 'register_surat.php', [
             'p_nama_dokumen' => $d['namaDokumen'],
             'p_agenda' => $d['agendaDokumen'],
             'p_nama_pengirim' => $d['namaPengirim'],
@@ -279,11 +318,12 @@ class ApiController extends Controller
 
     public function disposisi(Request $request)
     {
+        $api_endpoint = env('API_ENDPOINT');
 
         $id_pegawai = 1;
         // $response = Http::withHeaders([
         //     'id_pegawai' => 1,
-        // ])->post('http://103.100.27.59/~lacaksurat/add_history_disposisi.php', [
+        // ])->post($api_endpoint . 'add_history_disposisi.php', [
         //     'p_tiket_id' => $request->input('tiket_id'),
         //     'p_id_pegawai_penerima' => $request->input('penerima'),
         //     'p_keterangan' => $request->input('keterangan')
@@ -295,7 +335,7 @@ class ApiController extends Controller
             ->attach('p_tiket_id', $request->input('tiket_id'))
             ->attach('p_id_pegawai_penerima', $request->input('penerima'))
             ->attach('p_keterangan', $request->input('keterangan'))
-            ->post('http://103.100.27.59/~lacaksurat/add_history_disposisi.php', [
+            ->post($api_endpoint . 'add_history_disposisi.php', [
                 'Id_pegawai' => $id_pegawai,
             ]);
 
