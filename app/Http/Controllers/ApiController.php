@@ -117,11 +117,11 @@ class ApiController extends Controller
 
 
         $id_pegawai = 1;
-
         $files = $this->getDataBerkas($id_pegawai);
 
         $open = 0;
         $close = 0;
+        $total_berkas = 0;
 
         // Loop melalui array dan hitung jumlah open dan close
         foreach ($files as $f) {
@@ -132,17 +132,13 @@ class ApiController extends Controller
             }
         }
 
-        // Inisialisasi variabel total_berkas
-        $total_berkas = 0;
-
         // Loop melalui array dan tambahkan ke total
         foreach ($files as $nilai) {
             $total_berkas++;
         }
 
-
         $files = collect($files); // Ubah array menjadi koleksi untuk memungkinkan penggunaan paginator
-
+        $output = '';
         // Pencarian
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -321,13 +317,6 @@ class ApiController extends Controller
         $api_endpoint = env('API_ENDPOINT');
 
         $id_pegawai = 1;
-        // $response = Http::withHeaders([
-        //     'id_pegawai' => 1,
-        // ])->post($api_endpoint . 'add_history_disposisi.php', [
-        //     'p_tiket_id' => $request->input('tiket_id'),
-        //     'p_id_pegawai_penerima' => $request->input('penerima'),
-        //     'p_keterangan' => $request->input('keterangan')
-        // ]);
 
         $response = Http::withHeaders([
             'Content-Type' => 'multipart/form-data; boundary=---011000010111000001101001',
