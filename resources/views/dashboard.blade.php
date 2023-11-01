@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col">
                             <span class="h2 font-weight-bold mb-0">{{ $cards['add'] }}</span>
-                            <p class="card-title text-muted mb-0">Berkas di tambahkan</p>
+                            <p class="card-title text-muted mb-0">Berkas ditambahkan</p>
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape text-info">
@@ -48,7 +48,7 @@
                     <div class="row">
                         <div class="col">
                             <span class="h2 font-weight-bold mb-0">{{ $cards['open'] }}</span>
-                            <p class="card-title text-muted mb-0">Berkas dibuka</p>
+                            <p class="card-title text-muted mb-0">Berkas Terbuka</p>
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape text-success">
@@ -67,7 +67,7 @@
                     <div class="row">
                         <div class="col">
                             <span class="h2 font-weight-bold mb-0">{{ $cards['closed'] }}</span>
-                            <p class="card-title text-muted mb-0">Berkas ditutup</p>
+                            <p class="card-title text-muted mb-0">Berkas diarsipkan</p>
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape text-danger">
@@ -83,8 +83,8 @@
     <!-- end cards -->
 
     <!-- daftar berkas -->
-    <h3 class="my-3">Daftar Berkas</h3>
-    <div class="card my-3 px-4 py-3">
+    <h3 class="">Daftar Berkas</h3>
+    <div class="card px-4 py-3">
         <form action="/" method="get">
             <div class="d-flex my-3 flex-wrap">
                 <div class="d-flex flex-fill mb-1">
@@ -110,80 +110,110 @@
                 </div>
                 <div class="d-flex">
                     <div class="mx-1 flex-fill">
-                        <input type="submit" class="btn btn-primary" value="Search">
-                    </div>
-                    <div class="mx-1">
-                        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#TambahModal"><i
-                                class="fa fa-plus"></i></a>
-                        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AmbilModal"><i
-                                class="fa fa-file"></i></a>
+                        <input type="submit" class="btn btn-primary" id="searchButton" value="Search">
                     </div>
                 </div>
+                <a class="text-center pt-1 px-2" data-bs-toggle="collapse" href="#tags-filter" role="button"
+                    aria-expanded="false" aria-controls="tags-filter">
+                    Tags
+                </a>
             </div>
         </form>
-        <div class="d-flex align-items-center mb-3">
-            <div class="p-1"><span class="fw-bold me-5" style="cursor: text;">Tags</span></div>
-            <div class="p-1 flex-fill d-flex overflow-x-auto content-scrollbar">
-                @foreach ($tags as $t)
-                    <a style="white-space: nowrap;" class="mx-1 flex-fill w-100 btn bg-light">{{ $t }}</a>
-                @endforeach
+        <div class="collapse" id="tags-filter">
+            <div class="d-flex align-items-center mb-3">
+                <div class="p-1"><span class="fw-bold me-5" style="cursor: text;">Tags</span></div>
+                <div class="p-1 flex-fill d-flex overflow-x-auto content-scrollbar">
+                    @foreach ($tags as $t)
+                        <a style="white-space: nowrap;" class="mx-1 flex-fill w-100 btn bg-light">{{ $t }}</a>
+                    @endforeach
 
+                </div>
+                <div class="p-1 ms-5 justify-self-end"><a
+                        class="fw-bold text-primary link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                        href="#" style="white-space: nowrap;">Reset Filter</a></div>
             </div>
-            <div class="p-1 ms-5 justify-self-end"><a
-                    class="fw-bold text-primary link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                    href="#" style="white-space: nowrap;">Reset Filter</a></div>
+        </div>
+        <div class="table-responsive">
+
+            <table class="table" id="daftar-berkas">
+                @isset($files)
+                    @foreach ($files as $file)
+                        <tr>
+                            <td>{{ $loop->index + 1 }}</td>
+                            <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="History"><a
+                                    data-bs-toggle="modal" data-bs-target="#historyModal{{ $file['id_surat'] }}"
+                                    class="text-muted icon-hover"><i class="fa fa-clock"></i></a>
+                            </td>
+                            <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Disposisi"><a
+                                    data-bs-toggle="modal" data-bs-target="#disposisiModal{{ $file['tiket_id'] }}"
+                                    class="text-muted icon-hover"><i class="fa fa-share"></i></a>
+                            </td>
+                            <td class="text-muted">{{ $file['tiket_id'] }}</td>
+                            <td><a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="lihat Detail"
+                                    href="/detail/{{ $file['id_surat'] }}"
+                                    class="link-dark link-underline link-underline-opacity-0 fw-semibold link-underline-opacity-75-hover">{{ $file['nama_pengirim'] }}
+                            </td></a>
+                            <td class="text-muted
+                                    text-truncate">
+                                <span>{{ $file['ringkasan_dokumen'] }}</span>
+                            </td>
+
+                            @php
+                                $lampiran_path = null;
+                                $file_name = null;
+
+                                if (isset($file)) {
+                                    if (isset(json_decode($file['lampiran'], true)['path'])) {
+                                        $lampiran_path = json_decode($file['lampiran'], true)['path'];
+                                    }
+                                    $file_name = basename($lampiran_path);
+                                } else {
+                                    $file = 'Error file not found';
+                                }
+                            @endphp
+
+
+                            <td><a href="{{ env('API_ENDPOINT') }}lampiran/{{ $file['tiket_id'] }}/{{ $lampiran_path }}"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Download Attachment"
+                                    class="{{ $lampiran_path !== null ? '' : 'link-danger' }}">{{ $lampiran_path !== null ? 'Attachment' : 'Not Found!' }}
+                                    <i class="ms-2 fa fa-clipboard"></i></a>
+                            </td>
+                            <td class=" text-{{ $file['status'] === '1' ? 'success' : 'danger' }} fw-bold">
+                                {{ $file['status'] === '1' ? 'Open' : 'Closed' }}</td>
+                            <td class="text-muted text-end">
+                                <small>
+                                    {{ \Carbon\Carbon::parse($file['tanggal_diterima'])->format('d M') }}
+                                </small>
+                            </td>
+                        </tr>
+
+                        @include('modal.disposisi')
+                    @endforeach
+                @endisset
+            </table>
         </div>
 
-        @isset($files)
-            @foreach ($files as $file)
-                {{-- card berkas --}}
-                <div class="card mb-3">
-                    <div class="d-flex flex-row mb-2 card-header pt-4 px-5">
-                        <span class="fw-bold me-2"><i class="fa fa-file fa-sm me-2"></i>{{ $file['perihal'] }}</span>
-                        <span class="me-2">{{ \Carbon\Carbon::parse($file['tanggal_diterima'])->format('d M Y') }}</span>
-                        @if ($file['status'] == 1)
-                            <p class="me-2"><span class="badge bg-success">Open</span></p>
-                        @else
-                            <p class="me-2"><span class="badge bg-danger">Closed</span></p>
-                        @endif
-                        <span class="text-muted me-2 ms-auto">{{ $file['keterangan'] }}</span>
-                    </div>
-
-                    <div class="card-body px-5">
-
-                        <div class="row d-flex">
-                            <div class="col-12 col-lg-8 ">
-                                <h4>{{ $file['nama_pengirim'] }}</h4>
-                                <p class="text-muted">{{ $file['ringkasan_dokumen'] }}</p>
-                            </div>
-                            <div class="col-12 col-lg-4 card text-center">
-                                <span class="display-5 p-3 fw-bold text-muted">{{ $file['tiket_id'] }}</span>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <div class="d-flex flex-row-reverse align-items-center card-footer px-5 py-2">
-                        <div class="p-1"><a class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#disposisiModal{{ $file['tiket_id'] }}"><i class="fa fa-share"></i></a>
-                        </div>
-                        <div class="p-1"><a class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#historyModal{{ $file['id_surat'] }}"><i class="fa fa-clock"></i></a>
-                        </div>
-                        <div class="p-2"><a
-                                class="fw-bold text-primary link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                href="/detail/{{ $file['id_surat'] }}">Selengkapnya</a>
-                        </div>
-
-                    </div>
-                </div>
-                @include('modal.disposisi')
-            @endforeach
-        @endisset
-
         {{ $files->links('pagination::bootstrap-5') }}
+
+        <div class="fab-container">
+            <div class="fab shadow">
+                <div class="fab-content">
+                    <i class="fa fa-plus fa-2xl text-light"></i>
+                </div>
+            </div>
+            <div class="sub-button shadow" data-bs-toggle="tooltip" data-bs-placement="left"
+                data-bs-title="Ambil Berkas">
+                <button class="btn" data-bs-toggle="modal" data-bs-target="#AmbilModal">
+                    <i class="fa fa-file-download text-light"></i></button>
+            </div>
+            <div class="sub-button shadow" data-bs-toggle="tooltip" data-bs-placement="left"
+                data-bs-title="Tambah Berkas">
+                <button class="btn" data-bs-toggle="modal" data-bs-target="#TambahModal">
+                    <i class="fa fa-file-upload text-light"></i></button>
+            </div>
+        </div>
     </div>
+
     <!-- end daftar berkas -->
     @include('modal.ambil')
     @include('modal.history')

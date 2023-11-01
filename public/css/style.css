@@ -9,7 +9,6 @@
     z-index: 99;
 }
 
-
 .form .form-control.lr {
     left: 0.5rem;
     padding-left: 3.5rem;
@@ -36,7 +35,6 @@
     cursor: pointer;
 }
 
-
 .events li {
     display: flex;
     color: #999;
@@ -57,10 +55,9 @@
     border-radius: 50%;
     background: #fff;
     border: 1px #ccc solid;
-    width: .8em;
-    height: .8em;
+    width: 0.8em;
+    height: 0.8em;
 }
-
 
 .events span {
     padding: 0 1.5em 1.5em 1.5em;
@@ -97,7 +94,6 @@
     min-height: 100vh;
 }
 
-
 .content-scrollbar::-webkit-scrollbar {
     width: 7px;
     height: 7px;
@@ -114,3 +110,84 @@
     border: 1px;
 }
 
+.icon-hover:hover {
+    color: var(--bs-dark) !important;
+}
+
+.icon-hover:active {
+    color: var(--bs-primary) !important;
+}
+
+/* Floating Buttons */
+
+.fab-container {
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    user-select: none;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    &:hover {
+        height: 100%;
+        .sub-button:nth-child(2) {
+            transform: translateY(-80px);
+        }
+        .sub-button:nth-child(3) {
+            transform: translateY(-140px);
+        }
+        .sub-button:nth-child(4) {
+            transform: translateY(-200px);
+        }
+        .sub-button:nth-child(5) {
+            transform: translateY(-260px);
+        }
+        .sub-button:nth-child(6) {
+            transform: translateY(-320px);
+        }
+    }
+    .fab {
+        position: relative;
+        height: 70px;
+        width: 70px;
+        background-color: var(--bs-primary);
+        border-radius: 50%;
+        z-index: 2;
+        .fab-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+            .material-icons {
+                color: white;
+                font-size: 48px;
+            }
+        }
+    }
+    .sub-button {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        bottom: 10px;
+        right: 10px;
+        height: 50px;
+        width: 50px;
+        background-color: var(--bs-primary);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    button {
+        outline: none;
+        &:active {
+            outline: none;
+        }
+    }
+}

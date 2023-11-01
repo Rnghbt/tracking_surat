@@ -21,7 +21,7 @@ use App\Http\Controllers\ApiController;
 
 Route::get('/', [ApiController::class, 'dashboard']);
 
-Route::get('/', [ApiController::class, 'dashboard'])->name('search');
+Route::get('/search', [ApiController::class, 'search'])->name('search');
 
 Route::post('/tambah-berkas', [ApiController::class, 'upload']);
 
