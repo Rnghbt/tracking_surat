@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -168,7 +169,6 @@ class ApiController extends Controller
 
 
         $h = $this->getHistory();
-
         $history = json_decode($h, true);
 
         $tags = $this->getListTags();
@@ -183,7 +183,28 @@ class ApiController extends Controller
             "closed" => $close,
         ];
 
-        return view('dashboard', compact('files', 'history', 'disposisi', 'tags', 'cards'));
+        return view('dashboard', compact('files', 'history', 'disposisi', 'tags', 'cards'))->render();
+    }
+
+    public function paginate(Request $request)
+    {
+        $id_pegawai = 1;
+
+        $files = $this->getDataBerkas($id_pegawai);
+        $files = collect($files);
+
+        $disposisi = $this->getListDisposisi($id_pegawai);
+
+        $h = $this->getHistory();
+        $history = json_decode($h, true);
+
+        $perPage = 10; // Tentukan berapa item yang ingin Anda tampilkan per halaman
+        $currentPage = request()->get('page', 1); // Dapatkan nomor halaman saat ini
+
+        $currentPageItems = $files->slice(($currentPage - 1) * $perPage, $perPage); // Ambil item untuk halaman saat ini
+        $files = new LengthAwarePaginator($currentPageItems, $files->count(), $perPage, $currentPage, ['path' => request()->url()]);
+
+        return view('berkas', compact('files', 'history', 'disposisi'))->render();
     }
 
     public function search(Request $request)
@@ -191,8 +212,8 @@ class ApiController extends Controller
         $id_pegawai = 1;
 
         $files = $this->getDataBerkas($id_pegawai);
-
         $files = collect($files);
+
 
         // Pencarian
         if ($request->has('keyword')) {
@@ -215,7 +236,19 @@ class ApiController extends Controller
             }
         }
 
-        return json_encode($files);
+        $h = $this->getHistory();
+        $history = json_decode($h, true);
+
+
+        $disposisi = $this->getListDisposisi($id_pegawai);
+
+        $perPage = 10; // Tentukan berapa item yang ingin Anda tampilkan per halaman
+        $currentPage = request()->get('page', 1); // Dapatkan nomor halaman saat ini
+
+        $currentPageItems = $files->slice(($currentPage - 1) * $perPage, $perPage); // Ambil item untuk halaman saat ini
+        $files = new LengthAwarePaginator($currentPageItems, $files->count(), $perPage, $currentPage, ['path' => request()->url()]);
+
+        return view('berkas', compact('files', 'history', 'disposisi'))->render();
     }
 
 

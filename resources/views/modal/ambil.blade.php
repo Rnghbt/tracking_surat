@@ -11,7 +11,7 @@
                             </div>
                             <div class="modal-body">
                                 <label for="token">Masukan Token</label>
-                                <input type="text" name="token" id="" class="form-control">
+                                <input type="text" name="token" id="token" class="form-control">
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

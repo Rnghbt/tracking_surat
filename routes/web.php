@@ -29,6 +29,7 @@ Route::get('/detail/{id}', [ApiController::class, 'detail']);
 
 Route::post('/disposisi', [ApiController::class, 'disposisi']);
 
+Route::get('/paginate', [ApiController::class, 'paginate']);
 
 // test
 Route::get('/tes', [testupload::class, 'show']);

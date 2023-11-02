@@ -133,8 +133,12 @@
                         href="#" style="white-space: nowrap;">Reset Filter</a></div>
             </div>
         </div>
+        <div class="text-center">
+            <div class="spinner-border" id="loader" role="status" style="display: none">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
         <div class="table-responsive">
-
             <table class="table" id="daftar-berkas">
                 @isset($files)
                     @foreach ($files as $file)
@@ -186,35 +190,103 @@
                                 </small>
                             </td>
                         </tr>
-
                         @include('modal.disposisi')
                     @endforeach
                 @endisset
             </table>
+            {{ $files->links('pagination::bootstrap-5') }}
         </div>
 
-        {{ $files->links('pagination::bootstrap-5') }}
+    </div>
 
-        <div class="fab-container">
-            <div class="fab shadow">
-                <div class="fab-content">
-                    <i class="fa fa-plus fa-2xl text-light"></i>
-                </div>
+    <div class="fab-container">
+        <div class="fab shadow">
+            <div class="fab-content">
+                <i class="fa fa-plus fa-2xl text-light"></i>
             </div>
-            <div class="sub-button shadow" data-bs-toggle="tooltip" data-bs-placement="left"
-                data-bs-title="Ambil Berkas">
-                <button class="btn" data-bs-toggle="modal" data-bs-target="#AmbilModal">
-                    <i class="fa fa-file-download text-light"></i></button>
-            </div>
-            <div class="sub-button shadow" data-bs-toggle="tooltip" data-bs-placement="left"
-                data-bs-title="Tambah Berkas">
-                <button class="btn" data-bs-toggle="modal" data-bs-target="#TambahModal">
-                    <i class="fa fa-file-upload text-light"></i></button>
-            </div>
+        </div>
+        <div class="sub-button shadow" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ambil Berkas">
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#AmbilModal">
+                <i class="fa fa-file-download text-light"></i></button>
+        </div>
+        <div class="sub-button shadow" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tambah Berkas">
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#TambahModal">
+                <i class="fa fa-file-upload text-light"></i></button>
         </div>
     </div>
 
-    <!-- end daftar berkas -->
+
+
+    {{-- end daftar berkas --}}
+
+    <script>
+        // $(document).ready(function() {
+        //     $('#floatingInput').on('keyup', function {
+        //             $.get('search?='
+        //                 $('#floatingInput'.val(), function(data) {
+        //                     $('#daftar-berkas').html(data);
+        //                 })
+        //             })
+        //     });
+        // });
+
+        // search
+
+        $(document).ready(function() {
+            // hilangkan tombol cari
+            $('#searchButton').hide();
+
+            // event ketika keyword ditulis
+            $('#floatingInput').on('keyup', function() {
+
+                $('#loader').show();
+
+                $.get('search?keyword=' + $('#floatingInput').val(), function(res) {
+
+                    $('.table-responsive').html(res);
+                    $('#loader').hide();
+
+
+                });
+
+            });
+
+            $('#status').on('change', function() {
+                // Mendapatkan nilai yang dipilih
+                var nilaiTerpilih = $(this).val();
+                $('#loader').show();
+
+                // Memeriksa apakah nilai yang dipilih adalah 1
+                $.get('search?status=' + nilaiTerpilih, function(res) {
+
+                    $('.table-responsive').html(res);
+                    $('#loader').hide();
+
+                });
+            });
+
+            // paginate
+            $(document).on('click', '.pagination a', function(e) {
+                e.preventDefault();
+                let page = $(this).attr('href').split('page=')[1]
+                berkas(page)
+                $('#loader').show();
+
+            })
+
+            function berkas(page) {
+                $.ajax({
+                    url: "paginate?page=" + page,
+                    success: function(res) {
+                        $('.table-responsive').html(res);
+                        $('#loader').hide();
+
+                    }
+                })
+            }
+        });
+    </script>
+
     @include('modal.ambil')
     @include('modal.history')
     @include('modal.tambah')

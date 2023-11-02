@@ -18,9 +18,9 @@
                         @endforeach
                     </select>
                     <div class="form-floating mb-3">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="keterangan"
-                            style="height: 130px"></textarea>
-                        <label for="floatingTextarea">Comments</label>
+                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea{{ $file['id_surat'] }}"
+                            name="keterangan" style="height: 130px"></textarea>
+                        <label for="floatingTextarea{{ $file['id_surat'] }}">Comments</label>
                     </div>
                 </div>
                 <div class="modal-footer">

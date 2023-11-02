@@ -66,6 +66,13 @@
 
 
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Your Bootstrap-related JavaScript code here
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
