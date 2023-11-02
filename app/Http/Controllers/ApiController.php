@@ -141,13 +141,25 @@ class ApiController extends Controller
         $files = collect($files); // Ubah array menjadi koleksi untuk memungkinkan penggunaan paginator
         $output = '';
         // Pencarian
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $files = $files->filter(function ($file) use ($search) {
-                return stripos($file['nama_dokumen'], $search) !== false ||
-                    stripos($file['ringkasan_dokumen'], $search) !== false ||
-                    stripos($file['tiket_id'], $search) !== false ||
-                    stripos($file['nama_pengirim'], $search) !== false;
+        if ($request->has('keyword')) {
+            $keyword = $request->input('keyword');
+            $files = $files->filter(function ($file) use ($keyword) {
+                $keywords = explode(' ', $keyword);
+
+                $foundKeywords = 0;
+
+                foreach ($keywords as $k) {
+                    if (
+                        stripos($file['nama_dokumen'], $k) !== false ||
+                        stripos($file['ringkasan_dokumen'], $k) !== false ||
+                        stripos($file['tiket_id'], $k) !== false ||
+                        stripos($file['nama_pengirim'], $k) !== false
+                    ) {
+                        $foundKeywords++;
+                    }
+                }
+
+                return $foundKeywords === count($keywords);
             });
         }
 
@@ -215,14 +227,27 @@ class ApiController extends Controller
         $files = collect($files);
 
 
+
         // Pencarian
         if ($request->has('keyword')) {
             $keyword = $request->input('keyword');
             $files = $files->filter(function ($file) use ($keyword) {
-                return stripos($file['nama_dokumen'], $keyword) !== false ||
-                    stripos($file['ringkasan_dokumen'], $keyword) !== false ||
-                    stripos($file['tiket_id'], $keyword) !== false ||
-                    stripos($file['nama_pengirim'], $keyword) !== false;
+                $keywords = explode(' ', $keyword);
+
+                $foundKeywords = 0;
+
+                foreach ($keywords as $k) {
+                    if (
+                        stripos($file['nama_dokumen'], $k) !== false ||
+                        stripos($file['ringkasan_dokumen'], $k) !== false ||
+                        stripos($file['tiket_id'], $k) !== false ||
+                        stripos($file['nama_pengirim'], $k) !== false
+                    ) {
+                        $foundKeywords++;
+                    }
+                }
+
+                return $foundKeywords === count($keywords);
             });
         }
 

@@ -33,7 +33,27 @@
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 </head>
 
+<script>
+    $(document).ready(function() {
+
+        function hideSpinner() {
+            $('#container-loader').addClass('d-none');
+        }
+        $(window).on('load', function() {
+            hideSpinner();
+        });
+
+    });
+</script>
+
 <body class="content-scrollbar">
+    <div class="fixed-bottom">
+        <div id="container-loader" class="bg-light d-flex justify-content-center align-items-center vh-100">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow">
         <div class="container-md">
@@ -80,7 +100,6 @@
                 tooltipTriggerEl))
         });
     </script>
-
 
 </body>
 

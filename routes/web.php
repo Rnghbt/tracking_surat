@@ -19,13 +19,13 @@ use App\Http\Controllers\ApiController;
 //     return view('dashboard');
 // });
 
-Route::get('/', [ApiController::class, 'dashboard']);
+Route::get('/', [ApiController::class, 'dashboard'])->name('home');
 
 Route::get('/search', [ApiController::class, 'search'])->name('search');
 
-Route::post('/tambah-berkas', [ApiController::class, 'upload']);
+Route::post('/tambah-berkas', [ApiController::class, 'upload'])->name('tambah');
 
-Route::get('/detail/{id}', [ApiController::class, 'detail']);
+Route::get('/detail/{id}', [ApiController::class, 'detail'])->name('detail');
 
 Route::post('/disposisi', [ApiController::class, 'disposisi']);
 

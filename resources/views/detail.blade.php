@@ -6,7 +6,7 @@
     @else
         <!-- Detail berkas -->
         <div class="mt-3 mb-4">
-            <div class="d-flex justify-content-between mb-3">
+            <div class="d-flex justify-content-between ">
                 <h1>Detail Berkas</h1>
                 <span class="d-flex align-self-center justify-self-end">
                     <span class="rounded fw-bold text-light px-3 py-2 bg-success">
@@ -18,6 +18,13 @@
                     </a>
                 </span>
             </div>
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Detail</li>
+                </ol>
+            </nav>
 
 
             <div class="row mb-3">

@@ -17,7 +17,7 @@
                         class="link-dark link-underline link-underline-opacity-0 fw-semibold link-underline-opacity-75-hover">{{ $file['nama_pengirim'] }}
                 </td></a>
                 <td class="text-muted
-                            text-truncate">
+                        text-truncate">
                     <span>{{ $file['ringkasan_dokumen'] }}</span>
                 </td>
 
@@ -36,10 +36,15 @@
                 @endphp
 
 
-                <td><a href="{{ env('API_ENDPOINT') }}lampiran/{{ $file['tiket_id'] }}/{{ $lampiran_path }}"
-                        data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Download Attachment"
-                        class="{{ $lampiran_path !== null ? '' : 'link-danger' }}">{{ $lampiran_path !== null ? 'Attachment' : 'Not Found!' }}
-                        <i class="ms-2 fa fa-clipboard"></i></a>
+                <td>
+                    @if ($lampiran_path !== null)
+                        <a href="{{ env('API_ENDPOINT') }}lampiran/{{ $file['tiket_id'] }}/{{ $lampiran_path }}"
+                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Download Attachment">Attachment
+                            <i class="ms-2 fa fa-clipboard"></i></a>
+                    @else
+                        <span class="text-danger">Not Found!
+                            <i class="ms-2 fa fa-clipboard"></i></span>
+                    @endif
                 </td>
                 <td class=" text-{{ $file['status'] === '1' ? 'success' : 'danger' }} fw-bold">
                     {{ $file['status'] === '1' ? 'Open' : 'Closed' }}</td>
