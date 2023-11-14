@@ -62,7 +62,7 @@
             <div class="d-flex">
                 <div class="text-end">
                     <span class="fw-bold">Person 1</span>
-                    <p class="mb-0">12:20</p>
+                    <p class="mb-0">{{ \Carbon\Carbon::now()->format('h:i d M Y') }}</p>
                 </div>
                 <img src="https://api.lorem.space/image/face?w=48&h=48" style="width: 42px; height: 42px"
                     class="img-cover rounded-pill my-auto ms-3" alt="">

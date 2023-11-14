@@ -1,210 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sidebar dengan Bulma</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <style>
-        /* Atur lebar sidebar */
-        .sidebar {
-            width: 250px;
-            background-color: #f4f4f4;
-            position: fixed;
-            height: 100%;
-            overflow-y: auto;
-        }
-
-        /* Atur padding di dalam sidebar */
-        .sidebar-content {
-            padding: 20px;
-        }
-
-        /* Atur warna latar belakang pada link aktif */
-        .sidebar-menu a.is-active {
-            background-color: #3273dc;
-            color: #fff;
-        }
-
-        .container.content {
-            margin-left: 250px;
-        }
-
-        .card {
-            box-shadow: none;
-        }
-    </style>
+    <title>jQuery UI Datepicker - Format date</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/i18n/jquery-ui-i18n.min.js"></script>
+    <script>
+        $(function () {
+            $("#datepicker").datepicker($.datepicker.regional["id"]);
+            $("#datepicker").datepicker("option", "dateFormat", "d MM yy");
+        });
+    </script>
 </head>
 
 <body>
 
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="https://bulma.io">
-                <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-            </a>
-
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-                data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-
-        <div id="navbarBasicExample" class="navbar-menu">
-
-            <div class="navbar-end">
-                <div class="navbar-item">
-                    <div>
-                        <p>Person 1</p>
-                        <p>21:32</p>
-                    </div>
-                    <figure class="image ml-3">
-                        <img class="is-rounded" src="https://placeholder.com/32x32">
-                    </figure>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-content">
-
-            <div class="menu">
-                <ul class="menu-list">
-                    <li><a class="is-active" href="#">Dashboard</a></li>
-                    <li><a href="#">Surat</a></li>
-                </ul>
-                <ul class="menu-list">
-                    <li><a href="#"><span class="icon">
-                                <i class="ph ph-gear-six"></i>
-                            </span>Setting</a></li>
-                </ul>
-
-            </div>
-        </div>
-    </aside>
-
-    <!-- Konten -->
-    <div class="container content p-5">
-        <!-- cards -->
-        <div class="columns">
-            <div class="column">
-                <div class="card has-background-warning">
-                    <div class="columns is-vcentered px-4">
-                        <div class="column is-7">
-                            <span class="is-size-1 has-text-weight-bold" style="line-height: 1;">12</span>
-                            <p>Berkas di tambahkan</p>
-                        </div>
-                        <div class="column">
-                            <div class="my-auto">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="#000000"
-                                    viewBox="0 0 256 256">
-                                    <path
-                                        d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-40-64a8,8,0,0,1-8,8H136v16a8,8,0,0,1-16,0V160H104a8,8,0,0,1,0-16h16V128a8,8,0,0,1,16,0v16h16A8,8,0,0,1,160,152Z">
-                                    </path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="column">
-                <div class="card has-background-info">
-                    <div class="columns is-vcentered px-4">
-                        <div class="column is-7">
-                            <span class="is-size-1 has-text-weight-bold" style="line-height: 1;">12</span>
-                            <p>Berkas di tambahkan</p>
-                        </div>
-                        <div class="column">
-                            <div class="my-auto">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="#000000"
-                                    viewBox="0 0 256 256">
-                                    <path
-                                        d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-40-64a8,8,0,0,1-8,8H136v16a8,8,0,0,1-16,0V160H104a8,8,0,0,1,0-16h16V128a8,8,0,0,1,16,0v16h16A8,8,0,0,1,160,152Z">
-                                    </path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="column">
-                <div class="card has-background-success">
-                    <div class="columns is-vcentered px-4">
-                        <div class="column is-7">
-                            <span class="is-size-1 has-text-weight-bold" style="line-height: 1;">12</span>
-                            <p>Berkas di tambahkan</p>
-                        </div>
-                        <div class="column">
-                            <div class="my-auto">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="#000000"
-                                    viewBox="0 0 256 256">
-                                    <path
-                                        d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-40-64a8,8,0,0,1-8,8H136v16a8,8,0,0,1-16,0V160H104a8,8,0,0,1,0-16h16V128a8,8,0,0,1,16,0v16h16A8,8,0,0,1,160,152Z">
-                                    </path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="column">
-                <div class="card has-background-danger">
-                    <div class="columns is-vcentered px-4">
-                        <div class="column is-7">
-                            <span class="is-size-1 has-text-weight-bold" style="line-height: 1;">12</span>
-                            <p>Berkas di tambahkan</p>
-                        </div>
-                        <div class="column">
-                            <div class="my-auto">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="#000000"
-                                    viewBox="0 0 256 256">
-                                    <path
-                                        d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-40-64a8,8,0,0,1-8,8H136v16a8,8,0,0,1-16,0V160H104a8,8,0,0,1,0-16h16V128a8,8,0,0,1,16,0v16h16A8,8,0,0,1,160,152Z">
-                                    </path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- cards -->
-
-        <!-- Daftar Surat -->
-        <div class="py-3">
-            <h1>Daftar Surat</h1>
-            <hr>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="table is-narrow">No.</th>
-                        <th>Pengirim</th>
-                        <th>Perihal</th>
-                        <th class="table is-narrow">Status</th>
-                        <th class="table is-narrow">Histori</th>
-                        <th class="table is-narrow">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1.</td>
-                        <td>SMK N 1 Bali</td>
-                        <td>Kunjungan Industri</td>
-                        <td class="has-text-weight-bold has-text-success">Open</td>
-                        <td><button class="button is-primary"><span class="icon">
-                                    <i class="ph ph-clock"></i>
-                                </span><span>3</span></button></td>
-                        <td><button class="button is-primary">Detail</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <p>Date: <input type="text" id="datepicker" size="30"></p>
 
 </body>
 

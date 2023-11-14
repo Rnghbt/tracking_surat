@@ -50,7 +50,7 @@
                     {{ $file['status'] === '1' ? 'Open' : 'Closed' }}</td>
                 <td class="text-muted text-end">
                     <small>
-                        {{ \Carbon\Carbon::parse($file['tanggal_diterima'])->format('d M') }}
+                        {{ \Carbon\Carbon::parse($file['tanggal_diterima'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d M') }}
                     </small>
                 </td>
             </tr>
