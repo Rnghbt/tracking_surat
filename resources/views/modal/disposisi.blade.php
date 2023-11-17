@@ -10,16 +10,16 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="tiket_id" value="{{ $file['tiket_id'] }}">
-                    <select class="form-select mb-2" aria-label="Default select example" name="penerima">
+                    <input type="hidden" name="p_tiket_id" value="{{ $file['tiket_id'] }}">
+                    <select class="form-select mb-2" aria-label="Default select example" name="p_id_pegawai_penerima">
                         <option selected>Pilih Disposisi</option>
                         @foreach ($disposisi as $d)
                             <option value="{{ $d['id_pegawai'] }}">{{ $d['nama'] }}</option>
                         @endforeach
                     </select>
                     <div class="form-floating mb-3">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea{{ $file['id_surat'] }}"
-                            name="keterangan" style="height: 130px"></textarea>
+                        <textarea name="p_keterangan" class="form-control" placeholder="Leave a comment here"
+                            id="floatingTextarea{{ $file['id_surat'] }}" name="keterangan" style="height: 130px"></textarea>
                         <label for="floatingTextarea{{ $file['id_surat'] }}">Comments</label>
                     </div>
                 </div>

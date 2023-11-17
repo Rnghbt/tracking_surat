@@ -6,12 +6,15 @@
     @else
         <!-- Detail berkas -->
         <div class="mt-3 mb-4">
-            <div class="d-flex justify-content-between ">
-                <h1>Detail Berkas</h1>
-                <span class="d-flex align-self-center justify-self-end">
-                    <span class="rounded fw-bold text-light px-3 py-2 bg-success">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>Detail Berkas <span class="rounded fw-light text-muted">
                         {{ $file['tiket_id'] }}
-                    </span>
+                    </span></h1>
+
+                <span class="d-flex align-self-center justify-self-end">
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#closeModal">
+                        Arsipkan
+                    </button>
                     <a class="btn btn-primary ms-2" data-bs-toggle="modal"
                         data-bs-target="#disposisiModal{{ $file['tiket_id'] }}">
                         <i class="fa fa-share"></i>
@@ -135,7 +138,61 @@
         </div>
 
         @include('modal.disposisi')
+        <!-- Modal -->
+        <div class="modal fade" id="closeModal" tabindex="-1" aria-labelledby="closeModalLabel" aria-hidden="true">
+            <form id="closeForm" method="POST">
+                @csrf
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="closeModalLabel">Arsipkan Dokumen</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="tiket_id" value="{{ $file['tiket_id'] }}">
+                            <div class="">
+                                <label for="keterangan">Keterangan</label>
+                                <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="10"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" onclick="close()" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
 
+        <script>
+            $('#closeForm').submit(function(e) {
+                e.preventDefault(); // Hindari pengiriman formulir default
+
+                $('#closeModal').modal('hide');
+
+                // Kirim formulir menggunakan AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: '/close', // Ganti dengan URL proses formulir
+                    data: $('#closeForm').serialize(), // Serialize data formulir
+                    success: function(response) {
+
+                        // Tampilkan pesan sukses menggunakan alert Bootstrap
+                        $('.content .container').prepend(
+                            '<div class="alert alert-success alert-dismissible fade show" role="alert">Form berhasil dikirim!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+                        );
+                        // Bersihkan isi formulir
+                        $('#myForm')[0].trigger("reset");
+                    },
+                    error: function() {
+                        // Tampilkan pesan kesalahan jika terjadi error
+                        $('.content .container').prepend(
+                            '<div class="alert alert-danger alert-dismissible fade show" role="alert">Terjadi kesalahan. Silakan coba lagi.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+                        );
+                    }
+                });
+            });
+        </script>
         {{-- <form action="/disposisi" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row mb-5">

@@ -29,6 +29,12 @@ Route::get('/detail/{id}', [ApiController::class, 'detail'])->name('detail');
 
 Route::post('/disposisi', [ApiController::class, 'disposisi']);
 
+Route::post('/close', [ApiController::class, 'close']);
+
+Route::post('/ambil-berkas', [ApiController::class, 'ambilSurat']);
+
+Route::get('/history', [ApiController::class, 'getHistory']);
+
 Route::get('/paginate', [ApiController::class, 'paginate']);
 
 // test

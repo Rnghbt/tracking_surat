@@ -3,8 +3,9 @@
         @foreach ($files as $file)
             <tr>
                 <td>{{ $loop->index + 1 }}</td>
-                <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="History"><a data-bs-toggle="modal"
-                        data-bs-target="#historyModal{{ $file['id_surat'] }}" class="text-muted icon-hover"><i
+                <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="History"><a
+                        id="history{{ $file['tiket_id'] }}" data-bs-toggle="modal"
+                        data-bs-target="#historyModal{{ $file['tiket_id'] }}" class="text-muted icon-hover"><i
                             class="fa fa-clock"></i></a>
                 </td>
                 <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Disposisi"><a data-bs-toggle="modal"
@@ -55,8 +56,48 @@
                 </td>
             </tr>
             @include('modal.disposisi')
+            <!-- Modal -->
+            <div class="modal modal-lg fade" id="historyModal{{ $file['tiket_id'] }}" tabindex="-1"
+                aria-labelledby="historyModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="historyModalLabel">Histori {{ $file['nama_dokumen'] }}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="events {{ $file['tiket_id'] }}">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                $('#history{{ $file['tiket_id'] }}').on('click', function(e) {
+                    e.preventDefault();
+
+                    if (!$('#history{{ $file['tiket_id'] }}').hasClass('loaded')) {
+                        $.get('history?tiket_id=' + '{{ $file['tiket_id'] }}', function(res) {
+                            $('ul.events.{{ $file['tiket_id'] }}').html(res);
+                            $('#historyModal{{ $file['tiket_id'] }}').modal('show');
+                        })
+                        $('#history{{ $file['tiket_id'] }}').addClass('loaded');
+                    } else {
+                        $('#historyModal{{ $file['tiket_id'] }}').modal('show');
+                    }
+
+
+
+                })
+            </script>
         @endforeach
     @endisset
 </table>
 {{ $files->links('pagination::bootstrap-5') }}
-@include('modal.history')

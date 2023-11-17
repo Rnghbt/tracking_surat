@@ -1,5 +1,5 @@
             <!-- Modal -->
-            <form action="/" method="post">
+            <form action="/ambil-berkas" method="post">
                 @csrf
                 <div class="modal fade" id="AmbilModal" tabindex="-1" aria-labelledby="AmbilModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -12,6 +12,8 @@
                             <div class="modal-body">
                                 <label for="token">Masukan Token</label>
                                 <input type="text" name="token" id="token" class="form-control">
+                                <label for="token">Keterangan</label>
+                                <textarea name="keterangan" id="keterangan" class="form-control"></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

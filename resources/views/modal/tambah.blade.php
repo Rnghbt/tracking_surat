@@ -1,5 +1,5 @@
 <!-- Modal -->
-<form action="/tambah-berkas" method="post" enctype="multipart/form-data">
+<form action="/tambah-berkas" id="tambahBerkas" method="post" enctype="multipart/form-data">
     @csrf
     <div class="modal modal-lg fade " id="TambahModal" tabindex="-1" aria-labelledby="TambahModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
@@ -82,7 +82,8 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="attachmentDocument">Tags</label>
-                                    <input required name='p_tag' placeholder="Masukan tag" class="form-control">
+                                    <input required name='p_tag' placeholder="Masukan tag" id="tags"
+                                        class="form-control">
 
                                 </div>
                             </div>

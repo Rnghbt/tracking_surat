@@ -4,26 +4,7 @@
     <!-- cards -->
     <div class="row">
         <!-- card -->
-        <div class="col-xl-3 col-lg-6 mb-1">
-            <div class="card card-stats mb-4 mb-xl-0 bg-body-tertiary border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <span class="h2 font-weight-bold mb-0">{{ $cards['add'] }}</span>
-                            <p class="card-title text-muted mb-0">Berkas ditambahkan</p>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon icon-shape text-info">
-                                <i class="fas fa-plus fa-2xl"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end card -->
-        <!-- card -->
-        <div class="col-xl-3 col-lg-6 mb-1">
+        <div class="col-xl-4 col-lg-6 mb-1">
             <div class="card card-stats mb-4 mb-xl-0 bg-body-tertiary border-0 shadow-sm">
                 <div class="card-body">
                     <div class="row">
@@ -42,7 +23,7 @@
         </div>
         <!-- end card -->
         <!-- card -->
-        <div class="col-xl-3 col-lg-6 mb-1">
+        <div class="col-xl-4 col-lg-6 mb-1">
             <div class="card card-stats mb-4 mb-xl-0 bg-body-tertiary border-0 shadow-sm">
                 <div class="card-body">
                     <div class="row">
@@ -61,7 +42,7 @@
         </div>
         <!-- end card -->
         <!-- card -->
-        <div class="col-xl-3 col-lg-6 mb-1">
+        <div class="col-xl-4 col-lg-6 mb-1">
             <div class="card card-stats mb-4 mb-xl-0 bg-body-tertiary border-0 shadow-sm">
                 <div class="card-body">
                     <div class="row">
@@ -165,16 +146,6 @@
     {{-- end daftar berkas --}}
 
     <script>
-        // $(document).ready(function() {
-        //     $('#floatingInput').on('keyup', function {
-        //             $.get('search?='
-        //                 $('#floatingInput'.val(), function(data) {
-        //                     $('#daftar-berkas').html(data);
-        //                 })
-        //             })
-        //     });
-        // });
-
         // search
 
         $(document).ready(function() {

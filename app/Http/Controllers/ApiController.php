@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ApiController extends Controller
@@ -53,40 +55,32 @@ class ApiController extends Controller
         ];
     }
 
-    public function getHistory()
+    public function getHistory(Request $request)
     {
-        return $h = '[
-            {
-                "id": "1",
-                "time": "10:30",
-                "status": "Di Terima",
-                "desc": "Di Terima Oleh Front Office"
-            },
-            {
-                "id": "2",
-                "time": "11:45",
-                "status": "Proses",
-                "desc": "Dalam Proses Verifikasi"
-            },
-            {
-                "id": "3",
-                "time": "13:20",
-                "status": "Ditolak",
-                "desc": "Ditolak Karena Ketidaksesuaian Dokumen"
-            },
-            {
-                "id": "4",
-                "time": "14:55",
-                "status": "Selesai",
-                "desc": "Proses Selesai, Dokumen Dikirim"
-            },
-            {
-                "id": "5",
-                "time": "15:40",
-                "status": "Proses",
-                "desc": "Sedang Dalam Tahap Verifikasi Akhir"
+        $tiket_id = $request->input('tiket_id');
+        $id_pegawai = 1;
+        $files = $this->getDataBerkas($id_pegawai);
+        $files = collect($files);
+        foreach ($files as $f) {
+            if ($file['$tiket_id'] = $tiket_id) {
+                $file = $f;
+                break;
             }
-        ]';
+        }
+
+        $api_endpoint = env('API_ENDPOINT');
+
+        $listhistory = Http::withHeaders([
+            'tiket_id' => $tiket_id
+        ])->post($api_endpoint . 'get_history_surat.php');
+
+        $history = $listhistory->json()['data'];
+
+
+
+
+        // return $history;
+        return view('modal.history', compact('history', 'file'));
     }
 
     public function getListDisposisi($id_pegawai)
@@ -180,9 +174,6 @@ class ApiController extends Controller
         $files = new LengthAwarePaginator($currentPageItems, $files->count(), $perPage, $currentPage, ['path' => request()->url()]);
 
 
-        $h = $this->getHistory();
-        $history = json_decode($h, true);
-
         $tags = $this->getListTags();
 
 
@@ -195,7 +186,7 @@ class ApiController extends Controller
             "closed" => $close,
         ];
 
-        return view('dashboard', compact('files', 'history', 'disposisi', 'tags', 'cards'))->render();
+        return view('dashboard', compact('files', 'disposisi', 'tags', 'cards'))->render();
     }
 
     public function paginate(Request $request)
@@ -207,8 +198,6 @@ class ApiController extends Controller
 
         $disposisi = $this->getListDisposisi($id_pegawai);
 
-        $h = $this->getHistory();
-        $history = json_decode($h, true);
 
         $perPage = 10; // Tentukan berapa item yang ingin Anda tampilkan per halaman
         $currentPage = request()->get('page', 1); // Dapatkan nomor halaman saat ini
@@ -216,7 +205,7 @@ class ApiController extends Controller
         $currentPageItems = $files->slice(($currentPage - 1) * $perPage, $perPage); // Ambil item untuk halaman saat ini
         $files = new LengthAwarePaginator($currentPageItems, $files->count(), $perPage, $currentPage, ['path' => request()->url()]);
 
-        return view('berkas', compact('files', 'history', 'disposisi'))->render();
+        return view('berkas', compact('files', 'disposisi'))->render();
     }
 
     public function search(Request $request)
@@ -261,8 +250,6 @@ class ApiController extends Controller
             }
         }
 
-        $h = $this->getHistory();
-        $history = json_decode($h, true);
 
 
         $disposisi = $this->getListDisposisi($id_pegawai);
@@ -273,7 +260,7 @@ class ApiController extends Controller
         $currentPageItems = $files->slice(($currentPage - 1) * $perPage, $perPage); // Ambil item untuk halaman saat ini
         $files = new LengthAwarePaginator($currentPageItems, $files->count(), $perPage, $currentPage, ['path' => request()->url()]);
 
-        return view('berkas', compact('files', 'history', 'disposisi'))->render();
+        return view('berkas', compact('files', 'disposisi'))->render();
     }
 
 
@@ -362,10 +349,15 @@ class ApiController extends Controller
 
 
 
+        if ($response->json()['code'] == 200) {
+            $text = 'Berhasil!';
+            $color = 'success';
+        } else {
+            $text = 'Gagal!';
+            $color = 'danger';
+        }
 
-        $data = $response->json();
-        // Mengirimkan data ke JavaScript
-        return view('welcome', compact('data'));
+        return view('response', compact('text', 'color'));
     }
 
 
@@ -376,18 +368,94 @@ class ApiController extends Controller
 
         $id_pegawai = 1;
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'multipart/form-data; boundary=---011000010111000001101001',
-        ])
-            ->attach('p_tiket_id', $request->input('tiket_id'))
-            ->attach('p_id_pegawai_penerima', $request->input('penerima'))
-            ->attach('p_keterangan', $request->input('keterangan'))
-            ->post($api_endpoint . 'add_history_disposisi.php', [
-                'Id_pegawai' => $id_pegawai,
+        // $response = Http::withHeaders([
+        //     'Content-Type' => 'multipart/form-data',
+        //     'Id_pegawai' => $id_pegawai,
+        // ])->post($api_endpoint . 'add_history_disposisi.php', [
+        //     'p_tiket_id' => $request->input('p_tiket_id'),
+        //     'p_id_pegawai_penerima' => $request->input('p_id_pegawai_penerima'),
+        //     'p_keterangan' => $request->input('p_keterangan')
+        // ]);
+
+        $client = new Client();
+
+        $url = 'http://103.100.27.59/~lacaksurat/add_history_disposisi.php';
+
+        $headers = [
+            'id_pegawai' => '1',
+            'Content-Type' => 'multipart/form-data; boundary=---011000010111000001101001'
+        ];
+
+        $body = [
+            [
+                'name' => 'p_tiket_id',
+                'contents' => 'TKT1ABC'
+            ],
+            [
+                'name' => 'p_id_pegawai_penerima',
+                'contents' => '2'
+            ],
+            [
+                'name' => 'p_keterangan',
+                'contents' => 'XXXXXXXXXXXX'
+            ]
+        ];
+
+        try {
+            $response = $client->request('POST', $url, [
+                'headers' => $headers,
+                'multipart' => $body
             ]);
 
-        $data = [$request, $response->json(), $response];
-        // Mengirimkan data ke JavaScript
-        return view('welcome', compact('data'));
+            return $response->getBody()->getContents();
+        } catch (RequestException $e) {
+            return $e->getMessage();
+        }
+
+        // $data = [$request, $response];
+        // // Mengirimkan data ke JavaScript
+        // return view('welcome', compact('data'));
+    }
+
+    public function ambilSurat(Request $request)
+    {
+        $api_endpoint = env('API_ENDPOINT');
+        $res = Http::withHeaders([
+            'Content-Type' => 'multipart/form-data',
+        ])->post($api_endpoint . 'add_history_by_scan.php', [
+            'p_tiket_id' => $request->input('tiket_id'),
+            'p_id_pegawai_penerima' => '1',
+            'p_keterangan' => $request->input('keterangan')
+        ]);
+
+        if ($res->json()['code'] == 200) {
+            $text = 'Berhasil!';
+            $color = 'success';
+        } else {
+            $text = $res->json()['message'];
+            $color = 'danger';
+        }
+
+        return view('response', compact('text', 'color'));
+    }
+
+    public function close(Request $request)
+    {
+        $api_endpoint = env('API_ENDPOINT');
+        $res = Http::withHeaders([
+            'p_tiket_id' => $request->input('tiket_id'),
+            'p_my_id_pegawai' => '1',
+            'p_keterangan' => $request->input('keterangan')
+        ])->post($api_endpoint . 'close_history_surat.php');
+
+        if ($res->json()['code'] == 200) {
+            $text = 'Berhasil!';
+            $color = 'success';
+        } else {
+            $text = 'Gagal!';
+            $color = 'danger';
+        }
+
+        return view('response', compact('text', 'color'));
     }
 }
