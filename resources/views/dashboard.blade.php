@@ -89,14 +89,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex align-items-center">
                     <div class="mx-1 flex-fill">
                         <input type="submit" class="btn btn-primary" id="searchButton" value="Search">
                     </div>
                 </div>
                 <a class="text-center pt-1 px-2" data-bs-toggle="collapse" href="#tags-filter" role="button"
                     aria-expanded="false" aria-controls="tags-filter">
-                    Tags
+                    <i class="fa fa-tags"></i>
                 </a>
             </div>
         </form>
@@ -105,7 +105,8 @@
                 <div class="p-1"><span class="fw-bold me-5" style="cursor: text;">Tags</span></div>
                 <div class="p-1 flex-fill d-flex overflow-x-auto content-scrollbar">
                     @foreach ($tags as $t)
-                        <a style="white-space: nowrap;" class="mx-1 flex-fill w-100 btn bg-light">{{ $t }}</a>
+                        <a style="white-space: nowrap;" class="mx-1 flex-fill w-100 btn bg-light"
+                            onclick="filtertag('{{ $t }}')">{{ $t }}</a>
                     @endforeach
 
                 </div>

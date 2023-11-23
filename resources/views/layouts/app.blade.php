@@ -58,17 +58,19 @@
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow">
         <div class="container-md">
-            <a href="/" class="text-dark navbar-brand mb-0 h1 fw-bold">Tracking.</a>
+            <d class="d-flex gap-2 align-items-center">
+                <img src="{{ Session::get('login')['app_logo'] }}" alt="" style="width: 32px; height: 32px;">
+                <a href="/"
+                    class="text-dark navbar-brand mb-0 h1 fw-bold">{{ Session::get('login')['app_title'] }}</a>
+            </d>
 
             <div class="d-flex">
-                <div class="text-end">
-                    <span class="fw-bold">{{ Session::get('login')['nama_pegawai'] }}</span>
-                    <p class="mb-0">{{ \Carbon\Carbon::now()->format('d M Y h:i') }}</p>
-                </div>
                 <div class="dropdown-center">
-                    <a data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://api.lorem.space/image/face?w=48&h=48" style="width: 42px; height: 42px"
-                            class="img-cover rounded-pill my-auto ms-3" alt="">
+                    <a data-bs-toggle="dropdown" class="text-decoration-none text-dark" aria-expanded="false">
+                        <div class="text-end">
+                            <span class="fw-bold">{{ Session::get('login')['nama_pegawai'] }}</span>
+                            <p class="mb-0">{{ \Carbon\Carbon::now()->format('d M Y h:i') }}</p>
+                        </div>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Action</a></li>

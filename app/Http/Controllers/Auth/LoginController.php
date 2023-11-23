@@ -32,12 +32,13 @@ class LoginController extends Controller
             'code' => '200',
             'message' => 'Login Berhasil',
             'data' => [
-                'id_pegawai' => '1',
+                'app_title' => 'Tracking Surat',
+                'app_logo' => 'https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png',
+                'id_pegawai' => 4,
                 'nama_pegawai' => 'John Doe',
                 'token' => 'svalknj83w749efijwo'
             ]
         ];
-
         if ($request['code'] === '200') {
             $token = $request['data'];
             Session::put('login', $token);

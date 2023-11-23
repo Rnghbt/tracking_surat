@@ -40,16 +40,18 @@
                     <td>
                         @if ($lampiran_path !== null)
                             <a href="{{ env('API_ENDPOINT') }}lampiran/{{ $file['tiket_id'] }}/{{ $lampiran_path }}"
-                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                data-bs-title="Download Attachment">Attachment
+                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Download Attachment">
                                 <i class="ms-2 fa fa-clipboard"></i></a>
                         @else
-                            <span class="text-danger">Not Found!
+                            <span class="text-danger">
                                 <i class="ms-2 fa fa-clipboard"></i></span>
                         @endif
                     </td>
                     <td class=" text-{{ $file['status'] === '1' ? 'success' : 'danger' }} fw-bold">
-                        {{ $file['status'] === '1' ? 'Open' : 'Closed' }}</td>
+                        <i class="fa fa-{{ $file['status'] === '1' ? 'folder-open' : 'file-zipper' }}"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-title="{{ $file['status'] === '1' ? 'Status Open' : 'Status Closed' }}"></i>
+                    </td>
                     <td class="text-muted text-end">
                         <small>
                             {{ \Carbon\Carbon::parse($file['tanggal_diterima'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d M') }}

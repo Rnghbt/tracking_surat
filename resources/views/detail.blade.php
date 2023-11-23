@@ -140,7 +140,7 @@
         @include('modal.disposisi')
         <!-- Modal -->
         <div class="modal fade" id="closeModal" tabindex="-1" aria-labelledby="closeModalLabel" aria-hidden="true">
-            <form id="closeForm" method="POST">
+            <form action="/close" id="closeForm" method="POST">
                 @csrf
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -157,14 +157,14 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" onclick="close()" class="btn btn-primary">Save changes</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
 
-        <script>
+        {{-- <script>
             $('#closeForm').submit(function(e) {
                 e.preventDefault(); // Hindari pengiriman formulir default
 
@@ -192,29 +192,6 @@
                     }
                 });
             });
-        </script>
-        {{-- <form action="/disposisi" method="post" enctype="multipart/form-data">
-            @csrf
-            <div class="row mb-5">
-                <div class="col-6 mx-auto">
-                    <h4>Disposisi</h4>
-                    <input type="hidden" name="tiket_id" value="{{ $file['tiket_id'] }}">
-                    <select class="form-select mb-2" aria-label="Default select example" name="penerima">
-                        <option selected>Pilih Disposisi</option>
-                        @foreach ($disposisi as $d)
-                            <option value="{{ $d['id_pegawai'] }}">{{ $d['nama'] }}</option>
-                        @endforeach
-                    </select>
-                    <div class="form-floating mb-3">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="keterangan"
-                            style="height: 130px"></textarea>
-                        <label for="floatingTextarea">Comments</label>
-                    </div>
-                    <div class="text-end">
-                        <input type="submit" value="Kirim" class="btn btn-primary px-4">
-                    </div>
-                </div>
-            </div>
-        </form> --}}
+        </script> --}}
     @endif
 @endsection

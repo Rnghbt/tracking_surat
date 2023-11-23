@@ -7,11 +7,29 @@ use GuzzleHttp\Client;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ApiController extends Controller
 {
+    // public $id_pegawai = session('login', 'id_pegawai');
+    // public function id_pegawai(Request $request)
+    // {
+
+    //     return $request->session()->get('login', 'id_pegawai');
+    // }
+    public $id_pegawai;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            // Mengambil data dari session dan menetapkan ke variabel $id_pegawai
+            $this->id_pegawai = session('login.id_pegawai');
+
+            return $next($request);
+        });
+    }
 
     public function getDataBerkas($id_pegawai)
     {
@@ -21,39 +39,79 @@ class ApiController extends Controller
             'Content-Type' => 'multipart/form-data'
         ])->get($api_endpoint . 'list_surat.php');
 
-        $files = $response->json()['data'];;
+        $files = $response->json()['data'];
+
+        // $files = [
+        //     'code' => 200,
+        //     'message' => 'Data berhasil diambil.',
+        //     'data' => [
+        //         [
+        //             'id_surat' => '13',
+        //             'nama_dokumen' => 'Proposal Proyek Pembangunan',
+        //             'agenda' => 'Agenda Rapat',
+        //             'nama_pengirim' => 'PT. Bangun Sejahtera',
+        //             'perihal' => 'Proposal Proyek',
+        //             'ringkasan_dokumen' => 'Dokumen berisi proposal proyek pembangunan gedung baru.',
+        //             'tanggal_diterima' => '2023-10-12',
+        //             'tanggal_dokumen' => '2023-10-10',
+        //             'tanggal_agenda' => '2023-10-15',
+        //             'lampiran' => '{"size": "5MB", "filename": "proposal.pdf"}',
+        //             'tag' => '{"tags": ["proposal", "proyek", "pembangunan"]}',
+        //             'tiket_id' => 'E4BAAA',
+        //             'waktu_terima' => '2023-10-13 07:25:52.627934',
+        //             'keterangan' => 'Surat masuk baru',
+        //             'status' => '1',
+        //             'id_pegawai_from' => NULL,
+        //         ],
+        //         [
+        //             'id_surat' => '21',
+        //             'nama_dokumen' => 'Undangan makan',
+        //             'agenda' => 'Makan-makan Syukuran',
+        //             'nama_pengirim' => 'Eko Sutrisno',
+        //             'perihal' => 'Makan-makan',
+        //             'ringkasan_dokumen' => 'Seluruh karyawan diundang makan-makan di RM XXXX',
+        //             'tanggal_diterima' => '2023-10-05',
+        //             'tanggal_dokumen' => '2023-10-05',
+        //             'tanggal_agenda' => '2023-10-17',
+        //             'lampiran' => '{"path": "/lampiran/sample.pdf"}',
+        //             'tag' => '{"tags": ["proposal", "proyek", "pembangunan"]}',
+        //             'tiket_id' => '1F2F58',
+        //             'waktu_terima' => '2023-10-17 00:26:03.189312',
+        //             'keterangan' => 'Surat masuk baru',
+        //             'status' => '1',
+        //             'id_pegawai_from' => NULL,
+        //         ],
+        //     ],
+        // ];
+
+
         return $files;
     }
 
     public function getListTags()
     {
-        return $tags = [
-            'Aplikasi Surat',
-            'Pelacakan Surat',
-            'Manajemen Surat',
-            'Surat Elektronik',
-            'Sistem Pelacakan Surat',
-            'Pengiriman Surat',
-            'Sistem Manajemen Dokumen',
-            'E-surat',
-            'Teknologi Kantor',
-            'Manajemen Komunikasi',
-            'Pengelolaan Arsip',
-            'Efisiensi Kantor',
-            'Sistem Pengarsipan',
-            'Kemajuan Teknologi Surat',
-            'Surat Digital',
-            'Efisiensi Pengiriman Surat',
-            'Pengiriman Surat Elektronik',
-            'Surat Masuk'
-        ];
+        // $t = $this->getDataBerkas($this->id_pegawai);
+        // foreach ($t as $subArray) {
+        //     // Mendekode string JSON ke dalam bentuk array
+        //     $tagData = json_decode($subArray['tag'], true);
+
+        //     // Mendapatkan nilai dari kunci "tags"
+        //     $tagss = $tagData['tags'];
+
+        //     // Menambahkan tags ke dalam array $allTags
+        //     foreach ($tagss as $tag) {
+        //         $tags[] = $tag;
+        //     }
+        // }
+
+
+        return $tags = ["PKL", "MAKAN"];
     }
 
     public function getHistory(Request $request)
     {
         $tiket_id = $request->input('tiket_id');
-        $id_pegawai = 1;
-        $files = $this->getDataBerkas($id_pegawai);
+        $files = $this->getDataBerkas($this->id_pegawai);
         $files = collect($files);
         foreach ($files as $f) {
             if ($file['$tiket_id'] = $tiket_id) {
@@ -82,7 +140,7 @@ class ApiController extends Controller
         $api_endpoint = env('API_ENDPOINT');
         if (!session()->has('disposisi')) {
             $listDisposisi = Http::withHeaders([
-                'id_pegawai' => $id_pegawai
+                'id_pegawai' => $this->id_pegawai
             ])->get($api_endpoint . 'list_pegawai_disposisi.php');
 
             $ds = $listDisposisi->json()['data'];
@@ -104,9 +162,7 @@ class ApiController extends Controller
     public function dashboard(Request $request)
     {
 
-
-        $id_pegawai = 1;
-        $files = $this->getDataBerkas($id_pegawai);
+        $files = $this->getDataBerkas($this->id_pegawai);
 
         $open = 0;
         $close = 0;
@@ -171,7 +227,7 @@ class ApiController extends Controller
         $tags = $this->getListTags();
 
 
-        $disposisi = $this->getListDisposisi($id_pegawai);
+        $disposisi = $this->getListDisposisi($this->id_pegawai);
 
         $cards = [
             "add" => "2",
@@ -185,12 +241,11 @@ class ApiController extends Controller
 
     public function paginate(Request $request)
     {
-        $id_pegawai = 1;
 
-        $files = $this->getDataBerkas($id_pegawai);
+        $files = $this->getDataBerkas($this->id_pegawai);
         $files = collect($files);
 
-        $disposisi = $this->getListDisposisi($id_pegawai);
+        $disposisi = $this->getListDisposisi($this->id_pegawai);
 
 
         $perPage = 10; // Tentukan berapa item yang ingin Anda tampilkan per halaman
@@ -204,9 +259,8 @@ class ApiController extends Controller
 
     public function search(Request $request)
     {
-        $id_pegawai = 1;
 
-        $files = $this->getDataBerkas($id_pegawai);
+        $files = $this->getDataBerkas($this->id_pegawai);
         $files = collect($files);
 
 
@@ -246,7 +300,7 @@ class ApiController extends Controller
 
 
 
-        $disposisi = $this->getListDisposisi($id_pegawai);
+        $disposisi = $this->getListDisposisi($this->id_pegawai);
 
         $perPage = 10; // Tentukan berapa item yang ingin Anda tampilkan per halaman
         $currentPage = request()->get('page', 1); // Dapatkan nomor halaman saat ini
@@ -261,9 +315,8 @@ class ApiController extends Controller
 
     public function detail(string $id): View
     {
-        $id_pegawai = 1;
 
-        $files = $this->getDataBerkas($id_pegawai);
+        $files = $this->getDataBerkas($this->id_pegawai);
 
         foreach ($files as $f) {
             if ($f['id_surat'] == $id) {
@@ -286,7 +339,7 @@ class ApiController extends Controller
         }
 
 
-        $disposisi = $this->getListDisposisi($id_pegawai);
+        $disposisi = $this->getListDisposisi($this->id_pegawai);
 
 
         return view('detail', compact('file', 'file_name', 'lampiran_path', 'disposisi'));
@@ -299,7 +352,6 @@ class ApiController extends Controller
     {
         $api_endpoint = env('API_ENDPOINT');
 
-        $id_pegawai = 1;
 
         $tags = $request->input('p_tag');
         // Ubah string JSON ke dalam bentuk array asosiatif
@@ -338,20 +390,20 @@ class ApiController extends Controller
             'p_tanggal_dokumen' => $d['tanggalDokumen'],
             'p_tanggal_agenda' => $d['tanggalAgenda'],
             'p_tag' => json_encode(['tags' => $d['tags']]),
-            'p_id_pegawai' => $id_pegawai,
+            'p_id_pegawai' => $this->id_pegawai,
         ]);
 
 
 
         if ($response->json()['code'] == 200) {
-            $text = 'Berhasil!';
-            $color = 'success';
+            $status = 'success';
         } else {
-            $text = 'Gagal!';
-            $color = 'danger';
+            $status = 'failure';
         }
 
-        return view('response', compact('text', 'color'));
+        $text = $response->json()['message'];
+
+        return redirect()->route('home')->with($status, $text);
     }
 
 
@@ -360,13 +412,12 @@ class ApiController extends Controller
     {
         $api_endpoint = env('API_ENDPOINT');
 
-        $id_pegawai = 1;
 
         $client = new Client();
 
         $response = $client->request('POST', 'http://103.100.27.59/~lacaksurat/add_history_disposisi.php', [
             'headers' => [
-                'id_pegawai' => $id_pegawai,
+                'id_pegawai' => $this->id_pegawai,
                 'Content-Type' => 'application/x-www-form-urlencoded', // Sesuaikan dengan tipe konten yang sesuai
             ],
             'form_params' => [
@@ -379,14 +430,14 @@ class ApiController extends Controller
         $res = json_decode($response->getBody()->getContents(), true);
 
         if ($res['code'] == 200) {
-            $text = 'Berhasil!';
-            $color = 'success';
+            $status = 'success';
         } else {
-            $text = $res['message'];
-            $color = 'danger';
+            $status = 'failure';
         }
 
-        return view('response', compact('text', 'color'));
+        $text = $res['message'];
+
+        return redirect()->route('home')->with($status, $text);
     }
 
     public function ambilSurat(Request $request)
@@ -397,7 +448,7 @@ class ApiController extends Controller
         $response = $client->request('POST', 'http://103.100.27.59/~lacaksurat/add_history_by_scan.php', [
             'form_params' => [
                 'p_tiket_id' => $request->input('token'),
-                'p_id_pegawai_penerima' => '1',
+                'p_id_pegawai_penerima' => $this->id_pegawai,
                 'p_keterangan' => $request->input('keterangan')
             ]
         ]);
@@ -405,14 +456,14 @@ class ApiController extends Controller
         $res = json_decode($response->getBody()->getContents(), true);
 
         if ($res['code'] == 200) {
-            $text = 'Berhasil!';
-            $color = 'success';
+            $status = 'success';
         } else {
-            $text = $res['message'];
-            $color = 'danger';
+            $status = 'failure';
         }
 
-        return view('response', compact('text', 'color'));
+        $text = $res['message'];
+
+        return redirect()->route('home')->with($status, $text);
     }
 
     public function close(Request $request)
@@ -420,18 +471,18 @@ class ApiController extends Controller
         $api_endpoint = env('API_ENDPOINT');
         $res = Http::withHeaders([
             'p_tiket_id' => $request->input('tiket_id'),
-            'p_my_id_pegawai' => '1',
+            'p_my_id_pegawai' => $this->id_pegawai,
             'p_keterangan' => $request->input('keterangan')
-        ])->post($api_endpoint . 'close_history_surat.php');
+        ])->post($api_endpoint . 'close_history_surat.php')->json();
 
-        if ($res->json()['code'] == 200) {
-            $text = 'Berhasil!';
-            $color = 'success';
+        if ($res['code'] == 200) {
+            $status = 'success';
         } else {
-            $text = 'Gagal!';
-            $color = 'danger';
+            $status = 'failure';
         }
 
-        return view('response', compact('text', 'color'));
+        $text = $res['message'];
+
+        return redirect()->route('home')->with($status, $text);
     }
 }
