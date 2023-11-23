@@ -2,39 +2,55 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function index()
     {
-        $this->middleware('guest')->except('logout');
+        return view('auth.login');
+    }
+
+    public function loginProses(Request $request)
+    {
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required'
+        ]);
+
+        $data = [
+            'username' => $request->username,
+            'password' => $request->password,
+        ];
+
+        $request = [
+            'code' => '200',
+            'message' => 'Login Berhasil',
+            'data' => [
+                'id_pegawai' => '1',
+                'nama_pegawai' => 'John Doe',
+                'token' => 'svalknj83w749efijwo'
+            ]
+        ];
+
+        if ($request['code'] === '200') {
+            $token = $request['data'];
+            Session::put('login', $token);
+            return redirect()->route('home')->with('success', 'You are successfully logged in');
+        } else {
+            return redirect()->route('login')->with('failure', 'Username or Password is invalid');
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->forget('login');
+        // dd($request->session()->all());
+        return redirect()->route('home');
     }
 }

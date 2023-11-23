@@ -1,19 +1,6 @@
-<!doctype html>
-<html lang="en">
+@extends('layout.guest')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://kit.fontawesome.com/4b89c812ef.js" crossorigin="anonymous"></script>
-</head>
-<style>
-</style>
-
-<body>
+@section('content')
     <div class="container mt-5 pt-5">
 
         <div class="row">
@@ -40,8 +27,7 @@
                     <div class="form mb-3">
                         <i class="icon-left fa-solid fa-lock fa-md"></i>
                         <input type="password" class="form-control lr" id="floatingPassword" placeholder="Password">
-                        <i onclick="togglePassword()" class="icon-right act fa-solid fa-eye fa-md"
-                            id="togglePassword"></i>
+                        <i onclick="togglePassword()" class="icon-right act fa-solid fa-eye fa-md" id="togglePassword"></i>
                     </div>
 
                     <div class="text-center">
@@ -67,8 +53,4 @@
         </script>
 
     </div>
-
-
-</body>
-
-</html>
+@endsection

@@ -62,16 +62,74 @@
 
             <div class="d-flex">
                 <div class="text-end">
-                    <span class="fw-bold">Person 1</span>
-                    <p class="mb-0">{{ \Carbon\Carbon::now()->format('h:i d M Y') }}</p>
+                    <span class="fw-bold">{{ Session::get('login')['nama_pegawai'] }}</span>
+                    <p class="mb-0">{{ \Carbon\Carbon::now()->format('d M Y h:i') }}</p>
                 </div>
-                <img src="https://api.lorem.space/image/face?w=48&h=48" style="width: 42px; height: 42px"
-                    class="img-cover rounded-pill my-auto ms-3" alt="">
+                <div class="dropdown-center">
+                    <a data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://api.lorem.space/image/face?w=48&h=48" style="width: 42px; height: 42px"
+                            class="img-cover rounded-pill my-auto ms-3" alt="">
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <form action="/logout" method="post">
+                                @csrf
+                                <button class="dropdown-item">Logout</button>
+                            </form>
+                        </li>
+
+                    </ul>
+                </div>
+
             </div>
         </div>
     </nav>
     <!-- content -->
     <div class="content">
+        {{-- Toast --}}
+        <div class="toast-container top-0 end-0 p-3" id="toastPlacement">
+            @if (session()->has('failure'))
+                <div id="failtoast" class="toast text-bg-danger">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            {{ session()->get('failure') }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+
+                <script>
+                    $(document).ready(function() {
+                        const failtoast = bootstrap.Toast.getOrCreateInstance($('#failtoast'))
+                        failtoast.show()
+                    });
+                </script>
+            @endif
+            @if (session()->has('success'))
+                <div id="failtoast" class="toast text-bg-success">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            {{ session()->get('success') }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+
+                <script>
+                    $(document).ready(function() {
+                        const failtoast = bootstrap.Toast.getOrCreateInstance($('#failtoast'))
+                        failtoast.show()
+                    });
+                </script>
+            @endif
+        </div>
         <div class="container mt-3">
             @yield('content')
         </div>

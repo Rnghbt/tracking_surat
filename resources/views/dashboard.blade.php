@@ -52,7 +52,7 @@
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape text-danger">
-                                <i class="fas fa-folder fa-2xl"></i>
+                                <i class="fas fa-file-zipper fa-2xl"></i>
                             </div>
                         </div>
                     </div>
@@ -119,7 +119,7 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        <div class="table-responsive">
+        <div class="berkas-container">
             @include('berkas')
         </div>
 
@@ -160,7 +160,7 @@
 
                 $.get('search?keyword=' + $('#floatingInput').val(), function(res) {
 
-                    $('.table-responsive').html(res);
+                    $('.berkas-container').html(res);
                     $('#loader').hide();
 
 
@@ -176,7 +176,7 @@
                 // Memeriksa apakah nilai yang dipilih adalah 1
                 $.get('search?status=' + nilaiTerpilih, function(res) {
 
-                    $('.table-responsive').html(res);
+                    $('.berkas-container').html(res);
                     $('#loader').hide();
 
                 });
@@ -195,7 +195,7 @@
                 $.ajax({
                     url: "paginate?page=" + page,
                     success: function(res) {
-                        $('.table-responsive').html(res);
+                        $('.berkas-container').html(res);
                         $('#loader').hide();
 
                     }

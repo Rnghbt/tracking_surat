@@ -16,18 +16,12 @@ class ApiController extends Controller
     public function getDataBerkas($id_pegawai)
     {
         $api_endpoint = env('API_ENDPOINT');
-        if (!session()->has('berkas')) {
-            $response = Http::withHeaders([
-                'id_pegawai' => $id_pegawai,
-                'Content-Type' => 'multipart/form-data'
-            ])->get($api_endpoint . 'list_surat.php');
+        $response = Http::withHeaders([
+            'id_pegawai' => $id_pegawai,
+            'Content-Type' => 'multipart/form-data'
+        ])->get($api_endpoint . 'list_surat.php');
 
-            $files = $response->json()['data'];;
-
-            session(['berkas' => $files]);
-        } else {
-            $files = session('berkas');
-        }
+        $files = $response->json()['data'];;
         return $files;
     }
 
@@ -368,71 +362,53 @@ class ApiController extends Controller
 
         $id_pegawai = 1;
 
-        // $response = Http::withHeaders([
-        //     'Content-Type' => 'multipart/form-data',
-        //     'Id_pegawai' => $id_pegawai,
-        // ])->post($api_endpoint . 'add_history_disposisi.php', [
-        //     'p_tiket_id' => $request->input('p_tiket_id'),
-        //     'p_id_pegawai_penerima' => $request->input('p_id_pegawai_penerima'),
-        //     'p_keterangan' => $request->input('p_keterangan')
-        // ]);
-
         $client = new Client();
 
-        $url = 'http://103.100.27.59/~lacaksurat/add_history_disposisi.php';
-
-        $headers = [
-            'id_pegawai' => '1',
-            'Content-Type' => 'multipart/form-data; boundary=---011000010111000001101001'
-        ];
-
-        $body = [
-            [
-                'name' => 'p_tiket_id',
-                'contents' => 'TKT1ABC'
+        $response = $client->request('POST', 'http://103.100.27.59/~lacaksurat/add_history_disposisi.php', [
+            'headers' => [
+                'id_pegawai' => $id_pegawai,
+                'Content-Type' => 'application/x-www-form-urlencoded', // Sesuaikan dengan tipe konten yang sesuai
             ],
-            [
-                'name' => 'p_id_pegawai_penerima',
-                'contents' => '2'
-            ],
-            [
-                'name' => 'p_keterangan',
-                'contents' => 'XXXXXXXXXXXX'
+            'form_params' => [
+                'p_tiket_id' => $request->input('p_tiket_id'),
+                'p_id_pegawai_penerima' => $request->input('p_id_pegawai_penerima'),
+                'p_keterangan' => $request->input('p_keterangan')
             ]
-        ];
+        ]);
 
-        try {
-            $response = $client->request('POST', $url, [
-                'headers' => $headers,
-                'multipart' => $body
-            ]);
+        $res = json_decode($response->getBody()->getContents(), true);
 
-            return $response->getBody()->getContents();
-        } catch (RequestException $e) {
-            return $e->getMessage();
+        if ($res['code'] == 200) {
+            $text = 'Berhasil!';
+            $color = 'success';
+        } else {
+            $text = $res['message'];
+            $color = 'danger';
         }
 
-        // $data = [$request, $response];
-        // // Mengirimkan data ke JavaScript
-        // return view('welcome', compact('data'));
+        return view('response', compact('text', 'color'));
     }
 
     public function ambilSurat(Request $request)
     {
         $api_endpoint = env('API_ENDPOINT');
-        $res = Http::withHeaders([
-            'Content-Type' => 'multipart/form-data',
-        ])->post($api_endpoint . 'add_history_by_scan.php', [
-            'p_tiket_id' => $request->input('tiket_id'),
-            'p_id_pegawai_penerima' => '1',
-            'p_keterangan' => $request->input('keterangan')
+        $client = new Client();
+
+        $response = $client->request('POST', 'http://103.100.27.59/~lacaksurat/add_history_by_scan.php', [
+            'form_params' => [
+                'p_tiket_id' => $request->input('token'),
+                'p_id_pegawai_penerima' => '1',
+                'p_keterangan' => $request->input('keterangan')
+            ]
         ]);
 
-        if ($res->json()['code'] == 200) {
+        $res = json_decode($response->getBody()->getContents(), true);
+
+        if ($res['code'] == 200) {
             $text = 'Berhasil!';
             $color = 'success';
         } else {
-            $text = $res->json()['message'];
+            $text = $res['message'];
             $color = 'danger';
         }
 

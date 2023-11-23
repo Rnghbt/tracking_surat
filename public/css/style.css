@@ -191,3 +191,8 @@
         }
     }
 }
+.truncate-text {
+    overflow: hidden; /* Menyembunyikan teks yang keluar dari batas elemen */
+    text-overflow: ellipsis; /* Menampilkan elipsis untuk menandakan teks yang dipotong */
+    white-space: nowrap; /* Mencegah teks melintasi batas elemen */
+}

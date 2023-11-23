@@ -3,6 +3,7 @@
 use App\Http\Controllers\testupload;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,27 +20,32 @@ use App\Http\Controllers\ApiController;
 //     return view('dashboard');
 // });
 
-Route::get('/', [ApiController::class, 'dashboard'])->name('home');
+Route::middleware([\App\Http\Middleware\authapi::class])->group(function () {
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/search', [ApiController::class, 'search'])->name('search');
+    Route::get('/', [ApiController::class, 'dashboard'])->name('home');
 
-Route::post('/tambah-berkas', [ApiController::class, 'upload'])->name('tambah');
+    Route::get('/search', [ApiController::class, 'search'])->name('search');
 
-Route::get('/detail/{id}', [ApiController::class, 'detail'])->name('detail');
+    Route::post('/tambah-berkas', [ApiController::class, 'upload'])->name('tambah');
 
-Route::post('/disposisi', [ApiController::class, 'disposisi']);
+    Route::get('/detail/{id}', [ApiController::class, 'detail'])->name('detail');
 
-Route::post('/close', [ApiController::class, 'close']);
+    Route::post('/disposisi', [ApiController::class, 'disposisi']);
 
-Route::post('/ambil-berkas', [ApiController::class, 'ambilSurat']);
+    Route::post('/close', [ApiController::class, 'close']);
 
-Route::get('/history', [ApiController::class, 'getHistory']);
+    Route::post('/ambil-berkas', [ApiController::class, 'ambilSurat']);
 
-Route::get('/paginate', [ApiController::class, 'paginate']);
+    Route::get('/history', [ApiController::class, 'getHistory']);
 
-// test
-Route::get('/tes', [testupload::class, 'show']);
-Route::post('/test', [testupload::class, 'upload']);
+    Route::get('/paginate', [ApiController::class, 'paginate']);
+});
+Route::get('/login', [LoginController::class, 'index'])->name('login')->withoutMiddleware([\App\Http\Middleware\authapi::class]);
+Route::post('/login', [LoginController::class, 'loginProses'])->name('login')->withoutMiddleware([\App\Http\Middleware\authapi::class]);
+
+
+
 
 // Auth::routes();
 
