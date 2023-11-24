@@ -34,7 +34,7 @@ class LoginController extends Controller
             'data' => [
                 'app_title' => 'Tracking Surat',
                 'app_logo' => 'https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png',
-                'id_pegawai' => 4,
+                'id_pegawai' => '1',
                 'nama_pegawai' => 'John Doe',
                 'token' => 'svalknj83w749efijwo'
             ]
